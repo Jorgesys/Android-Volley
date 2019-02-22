@@ -9,10 +9,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -64,7 +70,7 @@ public class PostAdapter extends ArrayAdapter {
 
     List<Post> items;
 
-    public PostAdapter(Context context) {
+    public PostAdapter(final Context context) {
         super(context,0);
 
         // Create a Queue of requests
@@ -86,6 +92,20 @@ public class PostAdapter extends ArrayAdapter {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Error Respuesta en JSON: " + error.getMessage());
+                        String message = "";
+                        if (error instanceof NetworkError) {
+                            message = "NetworkError: Error Network!";
+                        } else if (error instanceof ServerError) {
+                            message = "ServerError: The server could not be found. Please try again after some time!!";
+                        } else if (error instanceof ParseError) {
+                            message = "ParseError: Parsing error! Please try again after some time!!";
+                        } else if (error instanceof NoConnectionError) {
+                            message = "NoConnectionError: Cannot connect to Internet...Please check your connection!";
+                        } else if (error instanceof TimeoutError) {
+                            message = "TimeoutError: Connection TimeOut! Please check your internet connection.";
+                        }
+                        Toast.makeText(context,message,Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "jsArrayRequest Error : "+ message);
 
                     }
                 }
@@ -100,7 +120,7 @@ public class PostAdapter extends ArrayAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItemView;
         listItemView = null == convertView ? layoutInflater.inflate(
@@ -143,6 +163,20 @@ public class PostAdapter extends ArrayAdapter {
                         public void onErrorResponse(VolleyError error) {
                             imagenPost.setImageResource(R.drawable.ic_error);
                             Log.d(TAG, "Error en respuesta Bitmap: "+ error.getMessage());
+                            String message ="";
+                            if (error instanceof NetworkError) {
+                                message = "NetworkError: Error Network!";
+                            } else if (error instanceof ServerError) {
+                                message = "ServerError: The server could not be found. Please try again after some time!!";
+                            } else if (error instanceof ParseError) {
+                                message = "ParseError: Parsing error! Please try again after some time!!";
+                            } else if (error instanceof NoConnectionError) {
+                                message = "NoConnectionError: Cannot connect to Internet...Please check your connection!";
+                            } else if (error instanceof TimeoutError) {
+                                message = "TimeoutError: Connection TimeOut! Please check your internet connection.";
+                            }
+                            Toast.makeText(parent.getContext(),message,Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "ImageRequest Error : "+ message);
                         }
                     });
             // Add request to the qeue (Volley).
@@ -151,7 +185,7 @@ public class PostAdapter extends ArrayAdapter {
         }else { //Picasso
             Log.i(TAG, "Loading images with Picasso.");
          // Request to get the image using Picasso (sorry glide fans!).
-           Picasso.with(getContext())
+           Picasso.get()
                 .load(item.getImagen())
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.drawable.ic_error)
