@@ -14,7 +14,7 @@ You can create an online .json tu use this applicacion with http://www.json-gene
 `{`
 	`"articles": [{`
 		`"id": "1080024",`
-		`"imageUrl": "http://img.gruporeforma.com/ImagenesIpad/4/467/3466469.jpg",`
+		`"imageUrl": "https://nytco-assets.nytimes.com/2018/10/DCD_3631-article.jpg",`
 		`"title": "In Poland’s Crooked Forest, a Mystery With No Straight Answer",`
 		`"category": "SCIENCE",`
 		`"info": "In Poland’s Krzywy Las, or Crooked Forest, the pine trees look like potbellied stick figures. On some 400 trees, the trunks buckle out 90 degrees, creating bark-covered bellies that drag just above the earth, oddly, all pointing in the same direction — north.",`
